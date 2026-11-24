@@ -1,0 +1,643 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatsApp Web Clone</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #d9e3df;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app {
+    width: 1100px;
+    height: 92vh;
+    max-height: 850px;
+    display: flex;
+    background: white;
+    box-shadow: 0 5px 25px #777;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 35%;
+    background: #fff;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    background: #008069;
+    color: white;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h2 {
+    font-size: 21px;
+}
+
+.search {
+    padding: 12px;
+    background: #f5f5f5;
+}
+
+.search input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    background: white;
+}
+
+.contacts {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.contact {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.contact:hover, .contact.active {
+    background: #e9edef;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #008069;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.contact-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.contact-info h4 {
+    margin-bottom: 5px;
+}
+
+.contact-info p {
+    font-size: 13px;
+    color: #777;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #efeae2;
+    min-width: 0;
+}
+
+.chat-header {
+    background: #f0f2f5;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.chat-header h3 {
+    font-size: 16px;
+}
+
+.chat-header p {
+    font-size: 12px;
+    color: #777;
+    margin-top: 4px;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #efeae2;
+    background-image: radial-gradient(#d8d2c9 0.7px, transparent 0.7px);
+    background-size: 18px 18px;
+}
+
+.message {
+    max-width: 75%;
+    padding: 10px 12px;
+    border-radius: 9px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+    box-shadow: 0 1px 2px #ccc;
+}
+
+.sent {
+    background: #d9fdd3;
+    align-self: flex-end;
+}
+
+.received {
+    background: white;
+    align-self: flex-start;
+}
+
+.time {
+    font-size: 10px;
+    color: #777;
+    display: block;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.message img {
+    max-width: 220px;
+    border-radius: 7px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-area {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f2f5;
+}
+
+.input-area input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px;
+    border: none;
+    outline: none;
+    border-radius: 25px;
+    font-size: 14px;
+}
+
+.btn {
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    background: transparent;
+    padding: 7px;
+}
+
+.send {
+    background: #008069;
+    color: white;
+    border-radius: 50%;
+    width: 43px;
+    height: 43px;
+}
+
+.empty {
+    margin: auto;
+    text-align: center;
+    color: #667781;
+    padding: 20px;
+}
+
+.menu {
+    cursor: pointer;
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 20px;
+}
+
+.dark {
+    background: #111b21;
+}
+
+.dark .sidebar,
+.dark .contact {
+    background: #111b21;
+    color: white;
+}
+
+.dark .contact:hover,
+.dark .contact.active {
+    background: #202c33;
+}
+
+.dark .contact-info p {
+    color: #aaa;
+}
+
+.dark .search,
+.dark .chat-header,
+.dark .input-area {
+    background: #202c33;
+    color: white;
+}
+
+.dark .search input,
+.dark .input-area input {
+    background: #2a3942;
+    color: white;
+}
+
+.dark .messages {
+    background: #0b141a;
+    background-image: none;
+}
+
+.dark .received {
+    background: #202c33;
+    color: white;
+}
+
+.dark .time {
+    color: #bbb;
+}
+
+.dark .header {
+    background: #202c33;
+}
+
+@media(max-width:650px) {
+    body {
+        height: 100dvh;
+    }
+
+    .app {
+        width: 100%;
+        height: 100dvh;
+        max-height: none;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .chat {
+        display: none;
+    }
+
+    .app.chat-open .sidebar {
+        display: none;
+    }
+
+    .app.chat-open .chat {
+        display: flex;
+        width: 100%;
+    }
+
+    .back {
+        display: block !important;
+    }
+}
+
+.back {
+    display: none;
+    border: none;
+    background: transparent;
+    font-size: 23px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app" id="app">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="header">
+            <h2>WhatsApp</h2>
+            <button class="menu" onclick="newContact()">＋</button>
+        </div>
+
+        <div class="search">
+            <input
+                type="text"
+                id="search"
+                placeholder="🔍 Search chats..."
+                oninput="renderContacts()"
+            >
+        </div>
+
+        <div class="contacts" id="contacts"></div>
+
+        <div style="padding:12px; text-align:center;">
+            <button class="btn" onclick="toggleDark()">🌙 Dark Mode</button>
+        </div>
+
+    </div>
+
+    <!-- CHAT AREA -->
+    <div class="chat">
+
+        <div class="chat-header">
+            <button class="back" onclick="goBack()">←</button>
+            <div class="avatar" id="chatAvatar">U</div>
+            <div>
+                <h3 id="chatName">Select a chat</h3>
+                <p id="chatStatus">Online</p>
+            </div>
+        </div>
+
+        <div class="messages" id="messages">
+            <div class="empty">
+                <h2>WhatsApp Web</h2>
+                <p>Select a contact to start chatting!</p>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <button class="btn" onclick="addEmoji()">😊</button>
+
+            <button class="btn" onclick="document.getElementById('imageInput').click()">📎</button>
+
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+                hidden
+                onchange="sendImage(event)"
+            >
+
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Type a message..."
+                onkeydown="if(event.key==='Enter') sendMessage()"
+            >
+
+            <button class="btn send" onclick="sendMessage()">➤</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+// CONTACT DATA
+let contacts = JSON.parse(localStorage.getItem("wa_contacts")) || [
+    {id: 1, name: "Ali", avatar: "A", messages: [
+        {text: "Hey! How are you?", sent: false, time: "10:30 AM"}
+    ]},
+    {id: 2, name: "Ahmed", avatar: "A", messages: [
+        {text: "Hello! Welcome to my chat.", sent: false, time: "Yesterday"}
+    ]},
+    {id: 3, name: "Sara", avatar: "S", messages: [
+        {text: "What are you doing?", sent: false, time: "Yesterday"}
+    ]},
+    {id: 4, name: "Usman", avatar: "U", messages: [
+        {text: "Let's build something amazing!", sent: false, time: "Yesterday"}
+    ]}
+];
+
+let activeId = null;
+
+// SAVE DATA
+function saveData() {
+    localStorage.setItem("wa_contacts", JSON.stringify(contacts));
+}
+
+// TIME
+function getTime() {
+    return new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
+
+// SHOW CONTACTS
+function renderContacts() {
+    let list = document.getElementById("contacts");
+    let query = document.getElementById("search").value.toLowerCase();
+
+    list.innerHTML = "";
+
+    contacts.filter(c => c.name.toLowerCase().includes(query))
+    .forEach(contact => {
+
+        let last = contact.messages[contact.messages.length - 1];
+
+        let div = document.createElement("div");
+        div.className = "contact" +
+            (activeId === contact.id ? " active" : "");
+
+        let avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = contact.avatar;
+
+        let info = document.createElement("div");
+        info.className = "contact-info";
+
+        let name = document.createElement("h4");
+        name.textContent = contact.name;
+
+        let preview = document.createElement("p");
+        preview.textContent = last
+            ? (last.image ? "📷 Photo" : last.text)
+            : "Start a conversation";
+
+        info.append(name, preview);
+        div.append(avatar, info);
+
+        div.onclick = () => openChat(contact.id);
+
+        list.appendChild(div);
+    });
+}
+
+// OPEN CHAT
+function openChat(id) {
+    activeId = id;
+
+    let contact = contacts.find(c => c.id === id);
+
+    document.getElementById("chatName").textContent = contact.name;
+    document.getElementById("chatAvatar").textContent = contact.avatar;
+    document.getElementById("chatStatus").textContent = "Online";
+
+    document.getElementById("app").classList.add("chat-open");
+
+    renderContacts();
+    renderMessages();
+}
+
+// DISPLAY MESSAGES
+function renderMessages() {
+    let area = document.getElementById("messages");
+    area.innerHTML = "";
+
+    let contact = contacts.find(c => c.id === activeId);
+
+    if (!contact) return;
+
+    contact.messages.forEach(msg => {
+
+        let div = document.createElement("div");
+
+        div.className = "message " +
+            (msg.sent ? "sent" : "received");
+
+        if (msg.image) {
+            let img = document.createElement("img");
+            img.src = msg.image;
+            div.appendChild(img);
+        }
+
+        if (msg.text) {
+            let text = document.createElement("div");
+            text.textContent = msg.text;
+            div.appendChild(text);
+        }
+
+        let time = document.createElement("span");
+        time.className = "time";
+        time.textContent = msg.time + (msg.sent ? "  ✓✓" : "");
+
+        div.appendChild(time);
+        area.appendChild(div);
+    });
+
+    area.scrollTop = area.scrollHeight;
+}
+
+// SEND MESSAGE
+function sendMessage() {
+    let input = document.getElementById("messageInput");
+    let text = input.value.trim();
+
+    if (!text || activeId === null) return;
+
+    let contact = contacts.find(c => c.id === activeId);
+
+    contact.messages.push({
+        text: text,
+        sent: true,
+        time: getTime()
+    });
+
+    input.value = "";
+
+    saveData();
+    renderMessages();
+    renderContacts();
+}
+
+// SEND IMAGE
+function sendImage(event) {
+    let file = event.target.files[0];
+
+    if (!file || activeId === null) return;
+
+    if (!file.type.startsWith("image/")) {
+        alert("Please select an image.");
+        event.target.value = "";
+        return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        alert("Please select an image smaller than 2 MB.");
+        event.target.value = "";
+        return;
+    }
+
+    let reader = new FileReader();
+
+    reader.onload = function(e) {
+        let contact = contacts.find(c => c.id === activeId);
+
+        contact.messages.push({
+            image: e.target.result,
+            text: "",
+            sent: true,
+            time: getTime()
+        });
+
+        saveData();
+        renderMessages();
+        renderContacts();
+    };
+
+    reader.readAsDataURL(file);
+    event.target.value = "";
+}
+
+// ADD EMOJI
+function addEmoji() {
+    let input = document.getElementById("messageInput");
+    input.value += " 😊";
+    input.focus();
+}
+
+// CREATE NEW CONTACT
+function newContact() {
+    let name = prompt("Enter contact name:");
+
+    if (!name || !name.trim()) return;
+
+    name = name.trim();
+
+    let contact = {
+        id: Date.now(),
+        name: name,
+        avatar: name.charAt(0).toUpperCase(),
+        messages: []
+    };
+
+    contacts.push(contact);
+
+    saveData();
+    renderContacts();
+    openChat(contact.id);
+}
+
+// DARK MODE
+function toggleDark() {
+    document.body.classList.toggle("dark");
+    document.getElementById("app").classList.toggle("dark");
+}
+
+// MOBILE BACK
+function goBack() {
+    document.getElementById("app").classList.remove("chat-open");
+}
+
+// START APP
+saveData();
+renderContacts();
+
+</script>
+
+</body>
+</html>
